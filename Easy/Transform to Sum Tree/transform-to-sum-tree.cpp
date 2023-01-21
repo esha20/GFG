@@ -117,16 +117,24 @@ class Solution {
         pair<bool,pair<int, int> > left = fasttosum(root->left);
         pair<bool, pair<int, int>> right = fasttosum (root->right);
         
+        //checking if the subtrees are sum tree or not
         bool leftans = left.first;
         bool rightans = right.first;
         
+        //to store the answer
         pair<bool, pair<int, int>> ans;
         
+        //if both the subtrees are sum tree then the current root is in sum tree if changed the value.
         if(leftans && rightans){
             ans.first = true;
         }
+        //store the previous data of the node
         ans.second.first = root->data;
+        
+        //add the previous as well as the recent data of the node to make the final node sum
         ans.second.second = left.second.first + right.second.first+left.second.second+right.second.second;
+        
+        //set the data of the root to be the current value.
         root->data = ans.second.second;
 
         return ans;
