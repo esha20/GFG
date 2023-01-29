@@ -97,29 +97,31 @@ class Solution {
   public:
     vector <int> bottomView(Node *root) {
         // Your Code Here
-        map<int,int> nodes;
-        vector<int> ans;
-        queue <pair<Node*, int>> q;
         
-        q.push(make_pair(root,0));
+        vector<int> ans;
+        
+        // if(root==NULL)
+        //     return ans;
+            
+        map<int, int> nodes;        //mapping horizontal distance to node values.
+        queue<pair<Node*,int>> q;  //nodes to horizontal distance 
+        q.push(make_pair(root, 0)); //root will always be at horizontal distance equal to 0
         
         while(!q.empty()){
-            pair <Node*, int> temp = q.front();
+            
+            pair<Node*,int> temp = q.front();
             q.pop();
-            Node* frontnode = temp.first;
-            int hd = temp.second;
             
-            nodes[hd] = frontnode->data;
+            Node* frontnode  = temp.first;
+            int hd= temp.second;
             
-            if(frontnode->left){
-                q.push(make_pair(frontnode->left,hd-1));
-            }
-            if(frontnode->right)
-            {
-                q.push(make_pair(frontnode->right, hd+1));
-            }
+            nodes[hd]=frontnode->data;          //we need the last nodes of each horizontal distance.
+            
+            if(frontnode->left)     q.push(make_pair(frontnode->left, hd-1));    //if the node is in left , hd gets hd-1
+            
+            if(frontnode->right)    q.push(make_pair(frontnode->right, hd+1));   //right nodes have hd+1
         }
-        for(auto i : nodes){
+        for(auto i:nodes){
             ans.push_back(i.second);
         }
         return ans;
