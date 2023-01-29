@@ -102,37 +102,36 @@ class Solution
     public:
     //Function to return a list of nodes visible from the top view 
     //from left to right in Binary Tree.
+    
+    //same as the bottom view, but here we just have to look out for the first value in every horizontal distance and ignore the rest
     vector<int> topView(Node *root)
     {
         //Your code here
         vector<int> ans;
+        queue<pair<Node*, int>> q;       //for traversal to find the node values for every hd.
+        map<int, int> nodes;            //mapping of HD to node value.
         
-        map <int, int> nodes;
-        queue <pair<Node*,int>> q;
-        
-        q.push(make_pair(root,0));
+        q.push(make_pair(root, 0));     //every root is at the horizontal distance of 0
         
         while(!q.empty()){
-           pair<Node*,int> temp =q.front();
-           q.pop();
-           Node* frontnode = temp.first;
-           int hd = temp.second;
-           
-           //one to one mapping only
-           //matlb check karo agar map mei iss horizontal distance pe pehle se hi ho koi value to iss value ko ignore kar dean nahi toh push kar dena hia isse hi.
-           if(nodes.find(hd) == nodes.end()){
-               nodes[hd]=frontnode->data;
-           }
-           if(frontnode->left){
-               q.push(make_pair(frontnode->left,hd-1));
-           }
-           if(frontnode->right){
-               q.push(make_pair(frontnode->right,hd+1));
-           }
+            pair<Node*, int> temp = q.front();
+            q.pop();
+            Node* frontnode = temp.first;
+            int hd = temp.second;
+            
+            if(nodes.find(hd)==nodes.end())
+                {
+                    //meaning if the value at this horizontal distance does not exist, we put a value there otherwise ignore that hd because it already has a value.
+                    nodes[hd]= frontnode->data;
+                }
+            
+            if(frontnode->left)     q.push(make_pair(frontnode->left, hd-1));
+            if(frontnode->right)    q.push(make_pair(frontnode->right,hd+1));
+            
         }
-        for(auto i : nodes){
+        for(auto i: nodes)
             ans.push_back(i.second);
-        }
+            
         return ans;
     }
 
