@@ -36,6 +36,20 @@ class Solution {
         }
         return false;
     }
+    bool dfs(int node, int parent, unordered_map<int, bool> &visited, vector<int> adj[]){
+        visited[node] = 1;
+        for(auto i : adj[node]){
+            if(!visited[i]){
+                visited[i]=1;
+                bool ans = dfs(i,node, visited, adj);
+                if(ans) return true;
+            }
+            else{
+                if(parent != i)     return true;
+            }
+        }
+        return false;
+    }
     // Function to detect cycle in an undirected graph.
     bool isCycle(int V, vector<int> adj[]) {
         
@@ -44,7 +58,8 @@ class Solution {
         
         for(int i=0;i<V;i++){
             if(!visited[i]){
-                bool ans = bfs(visited,adj, i);
+                // bool ans = bfs(visited,adj, i);
+                bool ans = dfs(i,-1,visited, adj);
                 if(ans ==1 )
                     return true;
             }
