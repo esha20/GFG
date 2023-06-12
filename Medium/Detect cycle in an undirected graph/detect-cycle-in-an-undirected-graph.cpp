@@ -5,63 +5,32 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    bool bfs(unordered_map<int, bool> &visited, vector<int> adj[], int node){
+  
+    bool dfs(vector<bool> &vis,vector<int> adj[], int node,int p){
+        vis[node]=1;
         
-        //map for parent DS
-        unordered_map<int,int>parent;
-        parent[node] = -1;     //the parent of the starting node will be -1
-        
-        //queue for bfs
-        queue <int> q;
-        
-        visited[node]=true;    //visited the node
-        q.push(node);          //push the visited node to the queue
-        
-        
-        while(!q.empty()){
-            int frontnode = q.front();
-            q.pop();
-            for(auto i : adj[frontnode]){
-            if(!visited[i]){
-                q.push(i);
-                parent[i] = frontnode;
-                visited[i]=1;
+        for(auto i :adj[node]){
+            if(!vis[i]){
+                bool ans = dfs(vis,adj,i,node);
+                if(ans)     return true;
             }
             else{
-                if(parent[frontnode]!= i){
-                    return true;
-                }
-            }
-        }
-        }
-        return false;
-    }
-    bool dfs(int node, int parent, unordered_map<int, bool> &visited, vector<int> adj[]){
-        visited[node] = 1;
-        for(auto i : adj[node]){
-            if(!visited[i]){
-                visited[i]=1;
-                bool ans = dfs(i,node, visited, adj);
-                if(ans) return true;
-            }
-            else{
-                if(parent != i)     return true;
+                if(p!=i)     return true;
             }
         }
         return false;
     }
+  
     // Function to detect cycle in an undirected graph.
     bool isCycle(int V, vector<int> adj[]) {
-        
-        //visited DS
-        unordered_map<int, bool> visited;
+        // Code here
+        vector<bool>vis(V,0);
+        vector<int> parent(V,-1);
         
         for(int i=0;i<V;i++){
-            if(!visited[i]){
-                // bool ans = bfs(visited,adj, i);
-                bool ans = dfs(i,-1,visited, adj);
-                if(ans ==1 )
-                    return true;
+            if(!vis[i]){
+                bool ans = dfs(vis,adj,i,-1);
+                if(ans)     return true;
             }
         }
         return false;
